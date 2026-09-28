@@ -1,0 +1,38 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Manual Publish
+on:
+  workflow_dispatch:
+    inputs:
+      github-release-id:
+        description: |
+          The GitHub release ID to attach the artifacts to.
+
+          Must be the value used in 'databaseId' for the release to attach
+          assets to.
+        type: string
+        required: true
+      artifact-retention-days:
+        description: |
+          The duration, in days, to retain artifacts for.
+
+          Defaults to '0' which defaults to the value configured for the
+          repository.
+        type: number
+        required: false
+        default: 0
+jobs:
+  publish:
+    name: Publish
+    permissions:
+      # -- To clone repository and write release artifacts
+      contents: write
+      # -- To uploads packages
+      packages: write
+    uses: ./.github/workflows/publish.yaml
+    with:
+      ref: ${{github.sha}}
+      github-release-id: ${{inputs.github-release-id}}
+      artifact-retention-days: ${{inputs.artifact-retention-days}}
+      attach-to-github-release: true
+    secrets:
+      github-token: ${{secrets.GITHUB_TOKEN}}
