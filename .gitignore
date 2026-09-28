@@ -44,3 +44,6 @@ ctags
 # Cache #
 ## CSpell ##
 .cspellcache
+
+# Archives #
+*.zip
