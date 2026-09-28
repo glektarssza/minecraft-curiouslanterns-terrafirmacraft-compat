@@ -28,6 +28,7 @@ Sessionx.vim
 
 ### Auto-generated Tag Files ###
 tags
+!data/**/tags
 ctags
 
 ### Undo Persistence ###
