@@ -1,0 +1,22 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: On Release
+on:
+  release:
+    types:
+      - published
+concurrency:
+  group: on-release-${{github.ref_name}}
+  queue: max
+jobs:
+  release:
+    name: Publish
+    permissions:
+      # -- To clone repository write release artifacts
+      contents: write
+    uses: ./.github/workflows/publish.yaml
+    with:
+      ref: ${{github.event.release.tag_name}}
+      github-release-id: ${{github.event.release.id}}
+      attach-to-github-release: true
+    secrets:
+      github-token: ${{secrets.GITHUB_TOKEN}}

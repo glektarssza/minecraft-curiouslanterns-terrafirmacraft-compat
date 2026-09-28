@@ -2,9 +2,24 @@
 name: On Push
 on:
   push:
+concurrency:
+  group: on-push-${{github.ref_name}}
+  cancel-in-progress: true
 env:
   GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 jobs:
+  build:
+    name: Build
+    permissions:
+      # -- To clone repository
+      contents: read
+    uses: ./.github/workflows/build.yaml
+    with:
+      ref: ${{github.sha}}
+      release-build: false
+      upload-artifacts: true
+    secrets:
+      github-token: ${{secrets.GITHUB_TOKEN}}
   lint:
     name: Lint
     permissions:

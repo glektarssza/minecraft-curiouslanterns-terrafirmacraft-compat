@@ -1,0 +1,34 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Manual Build
+on:
+  workflow_dispatch:
+    inputs:
+      release-build:
+        description: |
+          Whether to make a release build.
+        type: boolean
+        default: false
+        required: false
+      artifact-retention-days:
+        description: |
+          The duration, in days, to retain artifacts for.
+
+          Defaults to '0' which defaults to the value configured for the
+          repository.
+        type: number
+        required: false
+        default: 0
+jobs:
+  build:
+    name: Build
+    permissions:
+      # -- To clone repository
+      contents: read
+    uses: ./.github/workflows/build.yaml
+    with:
+      ref: ${{github.sha}}
+      release-build: ${{inputs.release-build}}
+      upload-artifacts: true
+      artifact-retention-days: ${{inputs.artifact-retention-days}}
+    secrets:
+      github-token: ${{secrets.GITHUB_TOKEN}}
