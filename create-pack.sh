@@ -65,7 +65,7 @@ fi
 # -- The path to the project root directory
 PROJECT_ROOT="$(readlink -e -- "${SCRIPT_DIR}/")"
 
-ARCHIVE="${PROJECT_ROOT}/curiouslanterns-terrafirmacraft-compat-$(git describe --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g')${SUFFIX}.zip"
+ARCHIVE="${PROJECT_ROOT}/curiouslanterns-terrafirmacraft-compat-$(git describe --tags)${SUFFIX}.zip"
 
 lib::logging::info "Starting to generate datapack archive..."
 
