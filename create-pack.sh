@@ -4,13 +4,15 @@ set +x +e
 declare -A EXIT_CODES=(
     [SUCCESS]=0
     [UNSUPPORTED_SHELL]=1
-    [EXISTING_ARCHIVE_REMOVAL_FAILED]=2
-    [ARCHIVE_GENERATION_FAILED]=3
+    [ENTER_PROJECT_ROOT_FAILED]=2
+    [EXISTING_ARCHIVE_REMOVAL_FAILED]=3
+    [ARCHIVE_GENERATION_FAILED]=4
 )
 
 declare -A EXIT_MESSAGES=(
     [SUCCESS]="Successfully generated datapack archive!"
     [UNSUPPORTED_SHELL]="Unsupported shell! Please use bash, ksh93, or zsh."
+    [ENTER_PROJECT_ROOT_FAILED]="Failed to enter project root directory!"
     [EXISTING_ARCHIVE_REMOVAL_FAILED]="Failed to remove existing datapack archive!"
     [ARCHIVE_GENERATION_FAILED]="Failed to generate datapack archive!"
 )
@@ -65,6 +67,12 @@ ARCHIVE="${PROJECT_ROOT}/curiouslanterns-terrafirmacraft-compat-$(if [[ -n "${VE
 
 lib::logging::info "Starting to generate datapack archive..."
 
+if ! pushd "${PROJECT_ROOT}" > /dev/null 2>&1; then
+    lib::logging::error "${EXIT_MESSAGES[ENTER_PROJECT_ROOT_FAILED]}"
+    # shellcheck disable=SC2086
+    exit ${EXIT_CODES[ENTER_PROJECT_ROOT_FAILED]}
+fi
+
 if [[ -f "${ARCHIVE}" ]]; then
     lib::logging::info "Removing existing datapack archive..."
     rm "${ARCHIVE}"
@@ -76,8 +84,8 @@ if [[ -f "${ARCHIVE}" ]]; then
     fi
 fi
 
-zip -r -9 -UN=UTF8 "${ARCHIVE}" "${PROJECT_ROOT}/data/" \
-    "${PROJECT_ROOT}/pack.mcmeta" "${PROJECT_ROOT}/pack.png"
+
+zip -r -9 -UN=UTF8 "${ARCHIVE}" "./data/" "./pack.mcmeta" "./pack.png"
 RESULT=$?
 
 if [[ ${RESULT} -ne 0 ]]; then
