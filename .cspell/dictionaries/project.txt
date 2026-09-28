@@ -1,4 +1,5 @@
 asexplicit
+curiouslanterns
 datapack
 esbenp
 firma
@@ -8,6 +9,7 @@ glektarssza
 hookspath
 hotfixes
 iregex
+mcmeta
 mpre
 netrwhist
 noconfirm
@@ -17,3 +19,4 @@ remotehub
 safecrlf
 sessionx
 tarssza
+terrafirmacraft
