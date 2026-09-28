@@ -56,16 +56,12 @@ _LIB_PATH="$(readlink -e -- "${SCRIPT_DIR}/scripts/lib/")"
 # shellcheck source=./scripts/lib/logging.sh
 source "${_LIB_PATH}/logging.sh"
 
-if [[ $* =~ --release ]]; then
-    SUFFIX=""
-else
-    SUFFIX="-dev"
-fi
-
 # -- The path to the project root directory
 PROJECT_ROOT="$(readlink -e -- "${SCRIPT_DIR}/")"
 
-ARCHIVE="${PROJECT_ROOT}/curiouslanterns-terrafirmacraft-compat-$(git describe --tags)${SUFFIX}.zip"
+VERSION="$(git describe --tags 2> /dev/null)"
+
+ARCHIVE="${PROJECT_ROOT}/curiouslanterns-terrafirmacraft-compat-$(if [[ -n "${VERSION}" && $* =~ --release ]]; then echo "${VERSION}"; else echo "vDEV"; fi).zip"
 
 lib::logging::info "Starting to generate datapack archive..."
 
