@@ -4,6 +4,9 @@ on:
   release:
     types:
       - published
+concurrency:
+  group: on-release-${{github.ref_name}}
+  queue: max
 jobs:
   release:
     name: Publish
